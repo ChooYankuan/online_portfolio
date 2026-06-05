@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choo Yan Kuan — Game Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070d1a;
+    --bg2: #0d1629;
+    --card: #111d35;
+    --border: #1e2f4d;
+    --cyan: #00d4ff;
+    --cyan2: #0099cc;
+    --text: #e8edf5;
+    --muted: #6b7fa3;
+    --glow: rgba(0, 212, 255, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+ 
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(7,13,26,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+  .nav-logo svg { color: var(--cyan); }
+  .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn-contact { background: var(--cyan); color: var(--bg); padding: 9px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; font-family: 'Syne', sans-serif; }
+  .btn-contact:hover { background: var(--text); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+ 
+  section { position: relative; z-index: 1; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; text-align: center; margin-bottom: 12px; }
+  .section-line { width: 60px; height: 3px; background: linear-gradient(90deg, var(--cyan), var(--cyan2)); margin: 0 auto 60px; border-radius: 2px; }
+ 
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 999px; padding: 7px 18px; font-size: 13px; color: var(--muted); margin-bottom: 32px; background: rgba(255,255,255,0.02); animation: fadeUp 0.6s ease both; }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .hero-name { font-family: 'Syne', sans-serif; font-size: clamp(52px, 9vw, 100px); font-weight: 800; line-height: 1; background: linear-gradient(135deg, #00d4ff 0%, #0099cc 40%, #7dd3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; animation: fadeUp 0.7s 0.1s ease both; }
+  .hero-tagline { font-family: 'Syne', sans-serif; font-size: clamp(18px, 2.5vw, 26px); font-weight: 600; color: var(--text); margin-bottom: 20px; animation: fadeUp 0.7s 0.2s ease both; }
+  .hero-sub { max-width: 560px; color: var(--muted); font-size: 17px; margin-bottom: 48px; animation: fadeUp 0.7s 0.3s ease both; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.7s 0.4s ease both; }
+  .btn-primary { background: var(--cyan); color: var(--bg); padding: 14px 30px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; font-family: 'Syne', sans-serif; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,212,255,0.35); }
+  .btn-secondary { border: 1px solid var(--border); color: var(--text); padding: 14px 30px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; font-family: 'Syne', sans-serif; transition: all 0.2s; background: rgba(255,255,255,0.02); }
+  .btn-secondary:hover { border-color: var(--cyan); background: var(--glow); transform: translateY(-2px); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+ 
+  /* ABOUT */
+  #about { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+  .about-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 48px; }
+  .about-text { font-size: 17px; line-height: 1.85; color: #b0bdd4; margin-bottom: 40px; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .about-item { display: flex; align-items: flex-start; gap: 14px; }
+  .about-icon { width: 36px; height: 36px; background: var(--glow); border: 1px solid rgba(0,212,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--cyan); }
+  .about-item h4 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .about-item p { font-size: 14px; color: var(--muted); }
+ 
+  /* INTERESTS strip */
+  .interests-strip { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; padding-top: 36px; border-top: 1px solid var(--border); }
+  .interest-pill { display: flex; align-items: center; gap: 8px; background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.18); border-radius: 999px; padding: 7px 16px; font-size: 13px; color: var(--text); font-weight: 500; }
+  .interest-pill svg { color: var(--cyan); flex-shrink: 0; }
+ 
+  /* PROJECTS */
+  #projects { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(0,212,255,0.3); box-shadow: 0 24px 48px rgba(0,212,255,0.08); }
+  .project-thumb { height: 200px; background: linear-gradient(135deg, #0d1629 0%, #162040 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .project-thumb::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,212,255,0.1) 0%, transparent 70%); }
+  .project-thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .project-thumb .play-btn { position: relative; z-index: 2; }
+  .project-thumb.has-video::before { display: none; }
+  .project-thumb.has-video .play-btn { opacity: 0; transition: opacity 0.2s; }
+  .project-thumb.has-video:hover .play-btn { opacity: 1; }
+  .play-btn { width: 60px; height: 60px; background: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; position: relative; z-index: 1; }
+  .play-btn:hover { transform: scale(1.1); box-shadow: 0 0 32px rgba(0,212,255,0.5); }
+  .project-body { padding: 28px; }
+  .project-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .project-role { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .project-desc { font-size: 14px; color: #8fa3c0; margin-bottom: 18px; line-height: 1.7; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tag { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 12px; color: var(--muted); font-weight: 500; }
+  .project-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 18px; }
+  .highlights h5 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .highlights ul { list-style: none; }
+  .highlights li { font-size: 13px; color: #8fa3c0; padding: 3px 0; display: flex; align-items: center; gap: 8px; }
+  .highlights li::before { content: ''; width: 5px; height: 5px; background: var(--cyan); border-radius: 50%; flex-shrink: 0; }
+  .project-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-top: 16px; }
+ 
+  /* SKILLS */
+  #skills { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
+  .skill-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .skill-card-header svg { color: var(--cyan); }
+  .skill-card-header h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .skill-row { margin-bottom: 18px; }
+  .skill-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; font-weight: 500; }
+  .skill-pct { color: var(--cyan); font-size: 13px; }
+  .skill-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+  .skill-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--cyan2)); border-radius: 99px; width: 0; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tool-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; font-size: 13px; color: var(--muted); transition: all 0.2s; text-align: center; }
+  .tool-item:hover { border-color: rgba(0,212,255,0.3); color: var(--text); background: var(--glow); }
+  .tool-item svg { color: var(--cyan); }
+ 
+  /* PHILOSOPHY */
+  #philosophy { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+  .philosophy-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .philosophy-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: all 0.3s; }
+  .philosophy-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,212,255,0.06); }
+  .phil-icon { width: 44px; height: 44px; background: var(--glow); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; color: var(--cyan); }
+  .philosophy-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+  .philosophy-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+ 
+  /* BEYOND DESIGN */
+  #beyond { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+  .beyond-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .beyond-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: all 0.3s; }
+  .beyond-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-4px); }
+  .beyond-icon { width: 48px; height: 48px; background: var(--glow); border: 1px solid rgba(0,212,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--cyan); font-size: 22px; }
+  .beyond-card h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .beyond-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+ 
+  /* CONTACT */
+  #contact { padding: 100px 48px; max-width: 700px; margin: 0 auto; }
+  .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 56px; text-align: center; }
+  .contact-avatar { width: 72px; height: 72px; background: linear-gradient(135deg, var(--cyan), var(--cyan2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -1px; color: #070d1a; }
+  .contact-name { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+  .contact-title { color: var(--cyan); font-size: 15px; margin-bottom: 28px; }
+  .contact-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 28px; }
+  .contact-items { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  .contact-row { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
+  .contact-row svg { color: var(--cyan); }
+  .contact-row a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .contact-row a:hover { color: var(--cyan); }
+ 
+  footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; position: relative; z-index: 1; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+</style>
+</head>
+<body>
+ 
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="11" width="4" height="2" rx="1"/><rect x="14" y="11" width="4" height="2" rx="1"/><rect x="11" y="8" width="2" height="4" rx="1"/><rect x="11" y="12" width="2" height="4" rx="1"/><path d="M5 8l-2 3v2l2 3h4l2-3v-2l-2-3H5z"/><path d="M15 8l2 3v2l-2 3h4l2-3v-2l-2-3h-4z"/></svg>
+    Choo Yan Kuan
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#beyond">Beyond Design</a></li>
+    <li><a href="#contact" class="btn-contact">Contact</a></li>
+  </ul>
+</nav>
+ 
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">Aspiring Game Developer · Singapore</div>
+  <h1 class="hero-name">Choo Yan Kuan</h1>
+  <p class="hero-tagline">Designing Meaningful Interactive Experiences</p>
+  <p class="hero-sub">Game design student at Singapore Polytechnic with a passion for UX/UI, visual design, and crafting gameplay that genuinely engages players.</p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn-primary">
+      View My Work
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+    <a href="#contact" class="btn-secondary">Get in Touch</a>
+  </div>
+</section>
+ 
+<!-- TOP SKILLS STRIP -->
+<section style="position:relative;z-index:1;padding: 0 48px 80px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="text-align:center;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;font-family:'Syne',sans-serif;font-weight:600;">Top Skills</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        C#
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><rect x="6" y="11" width="4" height="2" rx="1"/><rect x="14" y="11" width="4" height="2" rx="1"/><rect x="11" y="8" width="2" height="4" rx="1"/><rect x="11" y="12" width="2" height="4" rx="1"/></svg>
+        Game Design
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        3D Modelling
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Autodesk Maya
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--text);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        3D Animation
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="section-title">About Me</h2>
+  <div class="section-line"></div>
+  <div class="about-card">
+    <p class="about-text">I'm an aspiring game developer from Singapore Polytechnic with a strong interest in creating meaningful and engaging interactive experiences. Through my course and personal practice, I've built a solid foundation in design fundamentals — including layout, typography, and visual hierarchy — while keeping UX/UI thinking at the centre of everything I make. My project workflow involves planning, testing, and applying feedback, which has strengthened my problem-solving and iteration skills. I've also collaborated with teammates on various design and media projects, learning to communicate ideas clearly and adapt to different working styles.</p>
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div>
+          <h4>Education</h4>
+          <p>Diploma in Animation &amp; Game Design — Singapore Polytechnic (2023–2026)</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <div class="about-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <h4>Location</h4>
+          <p>Singapore</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <div class="about-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <h4>Work Experience</h4>
+          <p>Chef Assistant — taught discipline, teamwork &amp; time management</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <div class="about-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <h4>Focus Areas</h4>
+          <p>Game Design · UX/UI · Visual Design · Interactive Storytelling</p>
+        </div>
+      </div>
+    </div>
+    <div class="interests-strip">
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Music
+      </div>
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8l4 4-4 4"/></svg>
+        Canoeing
+      </div>
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Muay Thai
+      </div>
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="4" height="8" rx="1"/><rect x="10" y="5" width="4" height="11" rx="1"/><rect x="18" y="2" width="4" height="14" rx="1"/></svg>
+        Chess
+      </div>
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="11" width="4" height="2" rx="1"/><rect x="14" y="11" width="4" height="2" rx="1"/><rect x="11" y="8" width="2" height="4" rx="1"/><rect x="11" y="12" width="2" height="4" rx="1"/></svg>
+        Beta Game Testing
+      </div>
+      <div class="interest-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Digital Creativity
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PROJECTS -->
+<section id="projects">
+  <h2 class="section-title">Featured Projects</h2>
+  <div class="section-line"></div>
+  <p style="text-align:center;color:var(--muted);margin-top:-40px;margin-bottom:48px;font-size:15px;">Explore my game design work</p>
+  <div class="projects-grid">
+ 
+    <div class="project-card">
+      <div class="project-thumb" style="cursor:pointer;" onclick="window.open('https://youtu.be/EQaFG_h3-zs','_blank')">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1629 0%,#162040 60%,#0a1f35 100%);z-index:0;"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(0,212,255,0.12) 0%,transparent 70%);z-index:0;"></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.9"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#00d4ff;letter-spacing:0.05em;">CUSTODIA</span>
+          <span style="font-size:12px;color:#6b7fa3;">Unity · Game Design · Gold Milestone</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Custodia</h3>
+        <p class="project-role">Game Designer</p>
+        <p class="project-desc">An original game conceived, designed, and developed by Choo Yan Kuan. Applying design fundamentals and iterative playtesting to shape a focused, player-centred experience.</p>
+        <div class="tags">
+          <span class="tag">Game Design</span><span class="tag">Unity</span><span class="tag">UX/UI</span>
+        </div>
+        <hr class="project-divider">
+        <div class="highlights">
+          <h5>Key Highlights</h5>
+          <ul>
+            <li>Original concept &amp; full game development</li>
+            <li>Iterative design with playtesting feedback</li>
+            <li>Presented at Gold Milestone</li>
+          </ul>
+        </div>
+        <div class="project-meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#070d1a" stroke="none"/></svg>
+          <a href="https://youtu.be/EQaFG_h3-zs" target="_blank" style="color:var(--cyan);text-decoration:none;">Watch on YouTube</a>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="project-card">
+      <div class="project-thumb" style="cursor:pointer;" onclick="window.open('https://www.youtube.com/watch?v=knOEUuaGcrc','_blank')">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1629 0%,#162040 60%,#0a1f35 100%);z-index:0;"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(0,212,255,0.12) 0%,transparent 70%);z-index:0;"></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.9"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M6 17v2M18 17v2"/><path d="M2 12h20"/><circle cx="7" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>
+          <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#00d4ff;letter-spacing:0.05em;">CHOO CHOO COMBAT</span>
+          <span style="font-size:12px;color:#6b7fa3;">Unity · C# · Couch Co-op</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Choo Choo Combat</h3>
+        <p class="project-role">Game Designer &amp; Co-Coder</p>
+        <p class="project-desc">A 3D couch co-op game where players collect and steal train carts from opponents in a fast-paced, customisable arena. Build the arena and battle it out with friends!</p>
+        <div class="tags">
+          <span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Game Design</span><span class="tag">Co-op</span>
+        </div>
+        <hr class="project-divider">
+        <div class="highlights">
+          <h5>Key Highlights</h5>
+          <ul>
+            <li>Designed core gameplay loop &amp; arena mechanics</li>
+            <li>Co-coded game systems in C#</li>
+            <li>Built for local couch co-op multiplayer</li>
+            <li>Customisable arena design for replayability</li>
+          </ul>
+        </div>
+        <div class="project-meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#070d1a" stroke="none"/></svg>
+          <a href="https://www.youtube.com/watch?v=knOEUuaGcrc" target="_blank" style="color:var(--cyan);text-decoration:none;">Watch on YouTube</a>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="project-card">
+      <div class="project-thumb" style="cursor:pointer;" onclick="window.open('https://www.youtube.com/watch?v=a5DGiXP5QKY','_blank')">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1629 0%,#162040 60%,#0a1f35 100%);z-index:0;"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 40% 60%,rgba(0,212,255,0.12) 0%,transparent 70%);z-index:0;"></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.9"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#00d4ff;letter-spacing:0.05em;">BERRY BALLISTA</span>
+          <span style="font-size:12px;color:#6b7fa3;">Unity · C# · Couch Co-op</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Berry Ballista</h3>
+        <p class="project-role">Game Designer · Coder · UI · Level Design</p>
+        <p class="project-desc">A couch co-op game where you and a partner defend an island with a blender cannon. One player shoots, the other collects berry remains to make juice ammo — survive the berry people's wrath!</p>
+        <div class="tags">
+          <span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Game Design</span><span class="tag">UI</span><span class="tag">Level Design</span>
+        </div>
+        <hr class="project-divider">
+        <div class="highlights">
+          <h5>Key Highlights</h5>
+          <ul>
+            <li>Designed &amp; coded the cannon shooting system</li>
+            <li>Built UI and level layout from scratch</li>
+            <li>Co-op mechanics with distinct player roles</li>
+            <li>Group project with full design-to-code pipeline</li>
+          </ul>
+        </div>
+        <div class="project-meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#070d1a" stroke="none"/></svg>
+          <a href="https://www.youtube.com/watch?v=a5DGiXP5QKY" target="_blank" style="color:var(--cyan);text-decoration:none;">Watch on YouTube</a>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="project-card">
+      <div class="project-thumb" style="cursor:pointer;" onclick="window.open('https://youtu.be/S_BnVmg_hUg','_blank')">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1629 0%,#162040 60%,#0a1f35 100%);z-index:0;"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(0,212,255,0.12) 0%,transparent 70%);z-index:0;"></div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.9"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#00d4ff;letter-spacing:0.05em;">ENDLESS RUNNER</span>
+          <span style="font-size:12px;color:#6b7fa3;">Unreal Engine 5 · Blueprint</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Endless Runner</h3>
+        <p class="project-role">Game Designer &amp; Developer</p>
+        <p class="project-desc">An endless runner game built in Unreal Engine 5 using Blueprint visual scripting. Players navigate through procedurally challenging environments, testing reflexes and pushing for high scores.</p>
+        <div class="tags">
+          <span class="tag">Unreal Engine 5</span><span class="tag">Blueprint</span><span class="tag">Game Design</span><span class="tag">Level Design</span>
+        </div>
+        <hr class="project-divider">
+        <div class="highlights">
+          <h5>Key Highlights</h5>
+          <ul>
+            <li>Built fully in Unreal Engine 5</li>
+            <li>Designed core endless runner mechanics</li>
+            <li>Focused on responsive feel and player experience</li>
+          </ul>
+        </div>
+        <div class="project-meta">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#070d1a" stroke="none"/></svg>
+          <a href="https://youtu.be/S_BnVmg_hUg" target="_blank" style="color:var(--cyan);text-decoration:none;">Endless Runner</a>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- SKILLS -->
+<section id="skills">
+  <h2 class="section-title">Skills &amp; Tools</h2>
+  <div class="section-line"></div>
+  <div class="skills-grid">
+ 
+    <div class="skill-card">
+      <div class="skill-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        <h3>3D &amp; Animation</h3>
+      </div>
+      <div class="skill-row"><div class="skill-label"><span>3D Modelling</span><span class="skill-pct">60%</span></div><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Autodesk Maya</span><span class="skill-pct">58%</span></div><div class="skill-bar"><div class="skill-fill" data-width="58"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>3D Animation</span><span class="skill-pct">55%</span></div><div class="skill-bar"><div class="skill-fill" data-width="55"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>2D Animation</span><span class="skill-pct">52%</span></div><div class="skill-bar"><div class="skill-fill" data-width="52"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Substance Painter</span><span class="skill-pct">50%</span></div><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div></div>
+    </div>
+ 
+    <div class="skill-card">
+      <div class="skill-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <h3>Development &amp; Design</h3>
+      </div>
+      <div class="skill-row"><div class="skill-label"><span>C#</span><span class="skill-pct">78%</span></div><div class="skill-bar"><div class="skill-fill" data-width="78"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Unity</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Unreal Engine</span><span class="skill-pct">72%</span></div><div class="skill-bar"><div class="skill-fill" data-width="72"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>UX/UI Design</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Figma</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-width="82"></div></div></div>
+    </div>
+ 
+    <div class="skill-card">
+      <div class="skill-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <h3>Soft Skills</h3>
+      </div>
+      <div class="skill-row"><div class="skill-label"><span>Teamwork &amp; Collaboration</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Problem Solving</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-width="82"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Time Management</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+      <div class="skill-row"><div class="skill-label"><span>Communication</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <h2 class="section-title">My Design Philosophy</h2>
+  <div class="section-line"></div>
+  <div class="philosophy-grid">
+    <div class="philosophy-card">
+      <div class="phil-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      </div>
+      <h3>User-Centred Thinking</h3>
+      <p>Good design respects the person using it. I ensure my work is not only visually attractive but intuitive and accessible, keeping the user's needs at the forefront.</p>
+    </div>
+    <div class="philosophy-card">
+      <div class="phil-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/></svg>
+      </div>
+      <h3>Plan, Test, Iterate</h3>
+      <p>My workflow is built around iteration — planning thoroughly, testing with real feedback, and refining continuously. Great results come from embracing the process.</p>
+    </div>
+    <div class="philosophy-card">
+      <div class="phil-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <h3>Visuals Shape Experience</h3>
+      <p>I explore how visuals and gameplay intersect to create unique player experiences. Mood, colour, and layout are tools for emotion — not just decoration.</p>
+    </div>
+    <div class="philosophy-card">
+      <div class="phil-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h3>Stay Curious</h3>
+      <p>Testing new and beta-stage games keeps me sharp and inspired. Understanding what makes gameplay engaging drives me to push boundaries in my own work.</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- BEYOND DESIGN -->
+<section id="beyond">
+  <h2 class="section-title">Beyond Design</h2>
+  <div class="section-line"></div>
+  <p style="text-align:center;color:var(--muted);margin-top:-40px;margin-bottom:48px;font-size:15px;">The experiences that shape who I am</p>
+  <div class="beyond-grid">
+    <div class="beyond-card">
+      <div class="beyond-icon">🚣</div>
+      <h3>Canoeing &amp; Muay Thai</h3>
+      <p>Active since secondary school, canoeing and Muay Thai pushed me outside my comfort zone and taught me discipline, resilience, and the value of trying new things.</p>
+    </div>
+    <div class="beyond-card">
+      <div class="beyond-icon">♟️</div>
+      <h3>Chess</h3>
+      <p>Chess trains my mind to think ahead, adapt, and improvise — skills that transfer directly into game design thinking and problem-solving under constraints.</p>
+    </div>
+    <div class="beyond-card">
+      <div class="beyond-icon">🎵</div>
+      <h3>Music</h3>
+      <p>Music helps me focus and stay calm. It shapes the mood and creativity behind my ideas, and reminds me how atmosphere and tone can completely transform an experience.</p>
+    </div>
+    <div class="beyond-card">
+      <div class="beyond-icon">🍳</div>
+      <h3>Chef Assistant</h3>
+      <p>Working in a kitchen taught me real-world discipline, precise teamwork, and time management under pressure — lessons I carry into every project I take on.</p>
+    </div>
+    <div class="beyond-card">
+      <div class="beyond-icon">🎮</div>
+      <h3>Beta Game Testing</h3>
+      <p>I'm especially excited by testing new and beta-stage games. Experiencing games at the edge of development inspires me and deepens my understanding of what makes gameplay genuinely engaging.</p>
+    </div>
+    <div class="beyond-card">
+      <div class="beyond-icon">✏️</div>
+      <h3>Digital Creativity</h3>
+      <p>I constantly experiment with tools like Figma and Unity in my own time, exploring how digital creativity can merge with design thinking to produce something fresh and meaningful.</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="section-title">Get In Touch</h2>
+  <div class="section-line"></div>
+  <p style="text-align:center;color:var(--muted);margin-top:-40px;margin-bottom:48px;font-size:15px;">Let's create something meaningful together</p>
+  <div class="contact-card">
+    <div class="contact-avatar">YK</div>
+    <div class="contact-name">Choo Yan Kuan</div>
+    <div class="contact-title">Aspiring Game Developer · Singapore Polytechnic</div>
+    <hr class="contact-divider">
+    <div class="contact-items">
+      <div class="contact-row">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Singapore
+      </div>
+      <div class="contact-row">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <a href="https://www.linkedin.com/in/choo-yan-kuan" target="_blank">linkedin.com/in/choo-yan-kuan</a>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <p>© 2026 Choo Yan Kuan · Aspiring Game Developer · Singapore Polytechnic</p>
+</footer>
+ 
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skill-card').forEach(card => observer.observe(card));
+ 
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.project-card, .philosophy-card, .testimonial-card, .about-card, .skill-card, .beyond-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    fadeObserver.observe(el);
+  });
+</script>
+ 
+</body>
+</html>
+ 
